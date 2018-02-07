@@ -11,7 +11,7 @@
   "Неуютное бунгало по колено в воде"
   `.split(',');
   title.forEach((item, i) => {
-    title[i] = item.trim();
+    title[i] = item.replace(/"/g, '').trim();
   });
   const times = ['12:00', '13:00', '14:00'];
   const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -30,10 +30,10 @@
       this.price = getRandomNumber(1000, 1000000);
       this.type = (function () {
         let temp = heading.toLowerCase();
-        if (temp.indexOf('домик') || heading.indexOf('дворец')) {
+        if (~temp.indexOf('домик') || ~heading.indexOf('дворец')) {
           return 'house';
         }
-        if (temp.indexOf('бунгало')) {
+        if (~temp.indexOf('бунгало')) {
           return 'bungalo';
         }
         return 'flat';
@@ -102,8 +102,9 @@
   }
   tempSet.clear();
   {
+    // Отрисовка сгенерированных DOM-элементов в блок .tokyo__pin-map
     const tokyoPinMap = document.querySelector('.tokyo__pin-map');
-    let tempFragment = document.createDocumentFragment();
+    const tempFragment = document.createDocumentFragment();
     for (let value of ads) {
       let tempContainer = document.createElement('div');
       tempContainer.appendChild(document.createElement('img'));
@@ -118,12 +119,40 @@
     }
     tokyoPinMap.appendChild(tempFragment);
   }
+  {
+    const lodgeType = {
+      bungalo: 'Бунгало',
+      flat: 'Квартира',
+      house: 'Дом'
+    };
+    const dialogPanel = document.querySelector('.dialog__panel');
+    const lodgeTemplate = document.querySelector('#lodge-template').content;
+    const tempContainer = lodgeTemplate.cloneNode(true);
+    tempContainer.querySelector('.lodge__title').textContent = ads[0].offer.title;
+    tempContainer.querySelector('.lodge__price').textContent = `${ads[0].offer.price}` + '\u20BD/ночь';
+    tempContainer.querySelector('.lodge__type').textContent = `${lodgeType[ads[0].offer.type]}`;
+    tempContainer.querySelector('.lodge__rooms-and-guests').textContent = `Для ${ads[0].offer.guests} гостей в ${ads[0].offer.rooms} комнатах`;
+    tempContainer.querySelector('.lodge__checkin-time').textContent = `Заезд после ${ads[0].offer.checkin}, выезд до ${ads[0].offer.checkout}`;
+    {
+      const fragment = document.createDocumentFragment();
+      let temp;
+      for (let item of ads[0].offer.feauters) {
+        temp = document.createElement('span');
+        temp.className = `feature__image feature__image--${item}`;
+        fragment.appendChild(temp);
+      }
+      tempContainer.querySelector('.lodge__features').appendChild(fragment);
+    }
+    tempContainer.querySelector('.lodge__description').textContent = `${ads[0].offer.description}`;
+    dialogPanel.parentElement.replaceChild(tempContainer, dialogPanel);
+    document.querySelector('.dialog__title').querySelector('img').src = `${ads[0].author.avatar}`;
+  }
   function CheckInError(message) {
     this.name = 'CheckInError';
     this.message = message;
   }
   function getRandomNumber(min, max) {
-    return Math.floor(min + Math.random() * max - min + 1);
+    return Math.floor(min + Math.random() * (max - min + 1));
   }
 })();
 
