@@ -163,9 +163,45 @@
   {
     const dialog = document.querySelector('.dialog');
     const dialogBtn = dialog.querySelector('.dialog__close');
+    const lodgeType = {
+      bungalo: 'Бунгало',
+      flat: 'Квартира',
+      house: 'Дом'
+    };
+    const lodgeTemplate = document.querySelector('#lodge-template').content;
     //
     //
-    const openPopUp = () => {
+    const addPopUpInf = (container) => {
+      let current;
+      for (let it of ads) {
+        if (it.author.avatar === container.querySelector('img').getAttribute('src')) {
+          current = it;
+          break;
+        }
+      }
+      let dialogPanel = dialog.querySelector('.dialog__panel');
+      const tempContainer = lodgeTemplate.cloneNode(true);
+      tempContainer.querySelector('.lodge__title').textContent = current.offer.title;
+      tempContainer.querySelector('.lodge__price').textContent = `${current.offer.price}` + '\u20BD/ночь';
+      tempContainer.querySelector('.lodge__type').textContent = `${lodgeType[current.offer.type]}`;
+      tempContainer.querySelector('.lodge__rooms-and-guests').textContent = `Для ${current.offer.guests} гостей в ${current.offer.rooms} комнатах`;
+      tempContainer.querySelector('.lodge__checkin-time').textContent = `Заезд после ${current.offer.checkin}, выезд до ${current.offer.checkout}`;
+      {
+        const fragment = document.createDocumentFragment();
+        let temp;
+        for (let item of current.offer.feauters) {
+          temp = document.createElement('span');
+          temp.className = `feature__image feature__image--${item}`;
+          fragment.appendChild(temp);
+        }
+        tempContainer.querySelector('.lodge__features').appendChild(fragment);
+      }
+      tempContainer.querySelector('.lodge__description').textContent = `${current.offer.description}`;
+      dialogPanel.parentElement.replaceChild(tempContainer, dialogPanel);
+      document.querySelector('.dialog__title').querySelector('img').src = `${current.author.avatar}`;
+    };
+    const openPopUp = (container) => {
+      addPopUpInf(container);
       dialog.classList.remove('hidden');
       document.addEventListener('keydown', closePopUpPressEsc);
     };
@@ -179,6 +215,16 @@
         closePopUp();
       }
     };
+    const checkContainsPin = (container) => {
+      return container.classList.contains('pin');
+    };
+    const togglePinActive = (container) => {
+      const tempCheck = tokyoPinMap.querySelector('.pin--active');
+      if (tempCheck) {
+        tempCheck.classList.remove('pin--active');
+      }
+      container.classList.toggle('pin--active');
+    };
     dialogBtn.addEventListener('click', closePopUp);
     dialogBtn.addEventListener('click', function (e) {
       if (e.keyCode === ENTER_KEYCODE) {
@@ -186,29 +232,21 @@
       }
     });
     document.querySelector('.tokyo').addEventListener('click', function (e) {
-      const temp = e.target.parentElement;
-      if (!temp.classList.contains('pin')) {
+      const tempContainer = e.target.parentElement;
+      if (!checkContainsPin(tempContainer)) {
         return;
       }
-      const tempCheck = tokyoPinMap.querySelector('.pin--active');
-      if (tempCheck) {
-        tempCheck.classList.remove('pin--active');
-      }
-      temp.classList.toggle('pin--active');
-      openPopUp();
+      togglePinActive(tempContainer);
+      openPopUp(tempContainer);
     });
     document.querySelector('.tokyo').addEventListener('keydown', function (e) {
       if (e.keyCode === ENTER_KEYCODE) {
-        const temp = e.target.parentElement;
-        if (!temp.classList.contains('pin')) {
+        const tempContainer = e.target.parentElement;
+        if (!checkContainsPin(tempContainer)) {
           return;
         }
-        const tempCheck = tokyoPinMap.querySelector('.pin--active');
-        if (tempCheck) {
-          tempCheck.classList.remove('pin--active');
-        }
-        temp.classList.toggle('pin--active');
-        openPopUp();
+        togglePinActive(tempContainer);
+        openPopUp(tempContainer);
       }
     });
   }
