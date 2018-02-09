@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  const ENTER_KEYCODE = 13;
+  const ESC_KEYCODE = 27;
   const title = `
   "Большая уютная квартира",
   "Маленькая неуютная квартира",
@@ -13,6 +15,7 @@
   title.forEach((item, i) => {
     title[i] = item.replace(/"/g, '').trim();
   });
+  const tokyoPinMap = document.querySelector('.tokyo__pin-map');
   const times = ['12:00', '13:00', '14:00'];
   const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   const ads = [];
@@ -103,11 +106,12 @@
   tempSet.clear();
   {
     // Отрисовка сгенерированных DOM-элементов в блок .tokyo__pin-map
-    const tokyoPinMap = document.querySelector('.tokyo__pin-map');
     const tempFragment = document.createDocumentFragment();
     for (let value of ads) {
       let tempContainer = document.createElement('div');
-      tempContainer.appendChild(document.createElement('img'));
+      let tempImg = document.createElement('img');
+      tempImg.setAttribute('tabindex', '0');
+      tempContainer.appendChild(tempImg);
       tempContainer.className = 'pin';
       tempContainer.children[0].className = 'rounded';
       tempContainer.children[0].setAttribute('width', 40);
@@ -153,6 +157,60 @@
   }
   function getRandomNumber(min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
+  }
+  //
+  // PopUp
+  {
+    const dialog = document.querySelector('.dialog');
+    const dialogBtn = dialog.querySelector('.dialog__close');
+    //
+    //
+    const openPopUp = () => {
+      dialog.classList.remove('hidden');
+      document.addEventListener('keydown', closePopUpPressEsc);
+    };
+    const closePopUp = () => {
+      dialog.classList.add('hidden');
+      tokyoPinMap.querySelector('.pin--active').classList.remove('pin--active');
+      document.removeEventListener('keydown', closePopUpPressEsc);
+    };
+    const closePopUpPressEsc = (e) => {
+      if (e.keyCode === ESC_KEYCODE) {
+        closePopUp();
+      }
+    };
+    dialogBtn.addEventListener('click', closePopUp);
+    dialogBtn.addEventListener('click', function (e) {
+      if (e.keyCode === ENTER_KEYCODE) {
+        closePopUp();
+      }
+    });
+    document.querySelector('.tokyo').addEventListener('click', function (e) {
+      const temp = e.target.parentElement;
+      if (!temp.classList.contains('pin')) {
+        return;
+      }
+      const tempCheck = tokyoPinMap.querySelector('.pin--active');
+      if (tempCheck) {
+        tempCheck.classList.remove('pin--active');
+      }
+      temp.classList.toggle('pin--active');
+      openPopUp();
+    });
+    document.querySelector('.tokyo').addEventListener('keydown', function (e) {
+      if (e.keyCode === ENTER_KEYCODE) {
+        const temp = e.target.parentElement;
+        if (!temp.classList.contains('pin')) {
+          return;
+        }
+        const tempCheck = tokyoPinMap.querySelector('.pin--active');
+        if (tempCheck) {
+          tempCheck.classList.remove('pin--active');
+        }
+        temp.classList.toggle('pin--active');
+        openPopUp();
+      }
+    });
   }
 })();
 
