@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  const ENTER_KEYCODE = 13;
+  const ESC_KEYCODE = 27;
   const title = `
   "Большая уютная квартира",
   "Маленькая неуютная квартира",
@@ -13,6 +15,7 @@
   title.forEach((item, i) => {
     title[i] = item.replace(/"/g, '').trim();
   });
+  const tokyoPinMap = document.querySelector('.tokyo__pin-map');
   const times = ['12:00', '13:00', '14:00'];
   const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   const ads = [];
@@ -103,11 +106,12 @@
   tempSet.clear();
   {
     // Отрисовка сгенерированных DOM-элементов в блок .tokyo__pin-map
-    const tokyoPinMap = document.querySelector('.tokyo__pin-map');
     const tempFragment = document.createDocumentFragment();
     for (let value of ads) {
       let tempContainer = document.createElement('div');
-      tempContainer.appendChild(document.createElement('img'));
+      let tempImg = document.createElement('img');
+      tempImg.setAttribute('tabindex', '0');
+      tempContainer.appendChild(tempImg);
       tempContainer.className = 'pin';
       tempContainer.children[0].className = 'rounded';
       tempContainer.children[0].setAttribute('width', 40);
@@ -153,6 +157,98 @@
   }
   function getRandomNumber(min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
+  }
+  //
+  // PopUp
+  {
+    const dialog = document.querySelector('.dialog');
+    const dialogBtn = dialog.querySelector('.dialog__close');
+    const lodgeType = {
+      bungalo: 'Бунгало',
+      flat: 'Квартира',
+      house: 'Дом'
+    };
+    const lodgeTemplate = document.querySelector('#lodge-template').content;
+    //
+    //
+    const addPopUpInf = (container) => {
+      let current;
+      for (let it of ads) {
+        if (it.author.avatar === container.querySelector('img').getAttribute('src')) {
+          current = it;
+          break;
+        }
+      }
+      let dialogPanel = dialog.querySelector('.dialog__panel');
+      const tempContainer = lodgeTemplate.cloneNode(true);
+      tempContainer.querySelector('.lodge__title').textContent = current.offer.title;
+      tempContainer.querySelector('.lodge__price').textContent = `${current.offer.price}` + '\u20BD/ночь';
+      tempContainer.querySelector('.lodge__type').textContent = `${lodgeType[current.offer.type]}`;
+      tempContainer.querySelector('.lodge__rooms-and-guests').textContent = `Для ${current.offer.guests} гостей в ${current.offer.rooms} комнатах`;
+      tempContainer.querySelector('.lodge__checkin-time').textContent = `Заезд после ${current.offer.checkin}, выезд до ${current.offer.checkout}`;
+      {
+        const fragment = document.createDocumentFragment();
+        let temp;
+        for (let item of current.offer.feauters) {
+          temp = document.createElement('span');
+          temp.className = `feature__image feature__image--${item}`;
+          fragment.appendChild(temp);
+        }
+        tempContainer.querySelector('.lodge__features').appendChild(fragment);
+      }
+      tempContainer.querySelector('.lodge__description').textContent = `${current.offer.description}`;
+      dialogPanel.parentElement.replaceChild(tempContainer, dialogPanel);
+      document.querySelector('.dialog__title').querySelector('img').src = `${current.author.avatar}`;
+    };
+    const openPopUp = (container) => {
+      addPopUpInf(container);
+      dialog.classList.remove('hidden');
+      document.addEventListener('keydown', closePopUpPressEsc);
+    };
+    const closePopUp = () => {
+      dialog.classList.add('hidden');
+      tokyoPinMap.querySelector('.pin--active').classList.remove('pin--active');
+      document.removeEventListener('keydown', closePopUpPressEsc);
+    };
+    const closePopUpPressEsc = (e) => {
+      if (e.keyCode === ESC_KEYCODE) {
+        closePopUp();
+      }
+    };
+    const checkContainsPin = (container) => {
+      return container.classList.contains('pin');
+    };
+    const togglePinActive = (container) => {
+      const tempCheck = tokyoPinMap.querySelector('.pin--active');
+      if (tempCheck) {
+        tempCheck.classList.remove('pin--active');
+      }
+      container.classList.toggle('pin--active');
+    };
+    dialogBtn.addEventListener('click', closePopUp);
+    dialogBtn.addEventListener('click', function (e) {
+      if (e.keyCode === ENTER_KEYCODE) {
+        closePopUp();
+      }
+    });
+    document.querySelector('.tokyo').addEventListener('click', function (e) {
+      const tempContainer = e.target.parentElement;
+      if (!checkContainsPin(tempContainer)) {
+        return;
+      }
+      togglePinActive(tempContainer);
+      openPopUp(tempContainer);
+    });
+    document.querySelector('.tokyo').addEventListener('keydown', function (e) {
+      if (e.keyCode === ENTER_KEYCODE) {
+        const tempContainer = e.target.parentElement;
+        if (!checkContainsPin(tempContainer)) {
+          return;
+        }
+        togglePinActive(tempContainer);
+        openPopUp(tempContainer);
+      }
+    });
   }
 })();
 
