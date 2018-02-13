@@ -3,9 +3,15 @@ import {ads} from './default_ad';
 import {dialog, openPopUp, closePopUp, closePopUpPressEsc, checkContainsPin, togglePinActive} from './pop_up';
 import './form';
 
+
 const dialogBtn = dialog.querySelector('.dialog__close');
 const mapPins = document.querySelector('.tokyo');
-
+const adPin = document.querySelector('.pin__main');
+const mapTopMinLimit = 100;
+const mapTopMaxLimit = 560;
+const mapLeftMinLimit = 0;
+const mapLeftMaxLimit = mapPins.offsetWidth - adPin.offsetWidth;
+const fieldAdress = document.querySelector('#address');
 
 {
   // Отрисовка первого объявления по заданию
@@ -57,3 +63,47 @@ mapPins.addEventListener('keydown', (e) => {
     openPopUp(tempContainer);
   }
 });
+adPin.addEventListener('mousedown', (downEvt) => {
+  downEvt.preventDefault();
+  const startCoords = {
+    x: downEvt.clientX,
+    y: downEvt.clientY
+  };
+  const pin = downEvt.currentTarget;
+  const onMouseMove = (moveEvt) => {
+    moveEvt.preventDefault();
+    const shift = {
+      x: moveEvt.clientX - startCoords.x,
+      y: moveEvt.clientY - startCoords.y
+    };
+    let top = pin.offsetTop + shift.y;
+    let left = pin.offsetLeft + shift.x;
+    if (top < mapTopMinLimit) {
+      top = mapTopMinLimit;
+    } else if (top > mapTopMaxLimit) {
+      top = mapTopMaxLimit;
+    }
+    if (left < mapLeftMinLimit) {
+      left = mapLeftMinLimit;
+    } else if (left > mapLeftMaxLimit) {
+      left = mapLeftMaxLimit;
+    }
+    pin.style.top = top + 'px';
+    pin.style.left = left + 'px';
+    fieldAdress.value = `x: ${left + pin.offsetWidth / 2}, y: ${top + pin.offsetHeight}`;
+    startCoords.x = moveEvt.clientX;
+    startCoords.y = moveEvt.clientY;
+  };
+  const onMouseUp = (upEvt) => {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    adPin.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+

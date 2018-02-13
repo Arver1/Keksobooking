@@ -10,8 +10,7 @@ module.exports = {
   resolve: {
     extensions: ['.js']
   },
-  devtool: 'eval',
-  watch: true
+  devtool: 'eval'
 
 };
 
