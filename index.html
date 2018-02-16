@@ -72,7 +72,7 @@
     </div>
     <div id="offer-dialog" class="dialog">
       <div class="dialog__title"><img src="img/avatars/user01.png" alt="Avatar" width="70" height="70">
-        <a href="#" class="dialog__close"><img src="img/close.svg" alt="close" width="22" height="22"></a>
+        <a href="#" class="dialog__close" tabindex="1"><img src="img/close.svg" alt="close" width="22" height="22"></a>
       </div>
       <div class="dialog__panel">
         <h3 class="lodge__title">Уютное гнездышко для молодоженов</h3>
@@ -118,7 +118,7 @@
           method="post"
           enctype="multipart/form-data"
           autocomplete="off"
-          action="https://1510.dump.academy/keksobooking">
+          action=" https://js.dump.academy/keksobooking">
       <div class="form__content">
         <div class="form__panel">
           <div class="form__element  form__element--wide">
@@ -169,7 +169,8 @@
           <div class="form__element  form__element--wide">
             <label for="address">Адрес</label>
             <!-- <input id="address" name="address" type="text" pattern="ул\.[А-Яа-яЁё\s]{4,44}\s{1}д\.[0-9]{1,4}[А-Яа-яЁё]?" minlength="11" maxlength="55" required >-->
-            <input id="address" name="address" required readonly>
+            <!-- type="text" добавил из-за стилей -->
+            <input type="text" id="address" name="address" placeholder="x: 100, y: 100" pattern="^x:\s[0-9]+(\.?)\d,\sy:\s\d+(\.\d)?" required>
           </div>
           <div class="form__row">
             <div class="form__element">

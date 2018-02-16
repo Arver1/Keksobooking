@@ -1,17 +1,14 @@
 import {lodgeType, ENTER_KEYCODE} from './util';
 import {ads} from './default_ad';
 import {dialog, openPopUp, closePopUp, closePopUpPressEsc, checkContainsPin, togglePinActive} from './pop_up';
-import './form';
+import {mapTopMinLimit, mapTopMaxLimit, mapLeftMinLimit, mapLeftMaxLimit, checkBorderCoords} from './form';
 
 
 const dialogBtn = dialog.querySelector('.dialog__close');
 const mapPins = document.querySelector('.tokyo');
 const adPin = document.querySelector('.pin__main');
-const mapTopMinLimit = 100;
-const mapTopMaxLimit = 560;
-const mapLeftMinLimit = 0;
-const mapLeftMaxLimit = mapPins.offsetWidth - adPin.offsetWidth;
 const fieldAdress = document.querySelector('#address');
+
 
 {
   // Отрисовка первого объявления по заданию
@@ -37,6 +34,7 @@ const fieldAdress = document.querySelector('#address');
   dialogPanel.parentElement.replaceChild(tempContainer, dialogPanel);
   document.querySelector('.dialog__title').querySelector('img').src = `${ads[0].author.avatar}`;
   document.addEventListener('keydown', closePopUpPressEsc);
+  dialogBtn.dispatchEvent(new Event('focus'));
 }
 
 dialogBtn.addEventListener('click', closePopUp);
@@ -76,18 +74,8 @@ adPin.addEventListener('mousedown', (downEvt) => {
       x: moveEvt.clientX - startCoords.x,
       y: moveEvt.clientY - startCoords.y
     };
-    let top = pin.offsetTop + shift.y;
-    let left = pin.offsetLeft + shift.x;
-    if (top < mapTopMinLimit) {
-      top = mapTopMinLimit;
-    } else if (top > mapTopMaxLimit) {
-      top = mapTopMaxLimit;
-    }
-    if (left < mapLeftMinLimit) {
-      left = mapLeftMinLimit;
-    } else if (left > mapLeftMaxLimit) {
-      left = mapLeftMaxLimit;
-    }
+    let top = checkBorderCoords(pin.offsetTop + shift.y, mapTopMinLimit, mapTopMaxLimit);
+    let left = checkBorderCoords(pin.offsetLeft + shift.x, mapLeftMinLimit, mapLeftMaxLimit);
     pin.style.top = top + 'px';
     pin.style.left = left + 'px';
     fieldAdress.value = `x: ${left + pin.offsetWidth / 2}, y: ${top + pin.offsetHeight}`;
@@ -106,4 +94,3 @@ adPin.addEventListener('mousedown', (downEvt) => {
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
-
