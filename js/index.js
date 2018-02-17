@@ -1,5 +1,5 @@
 import {ENTER_KEYCODE, showError} from './util';
-import {dialog, openPopUp, closePopUp, checkContainsPin, togglePinActive} from './pop_up';
+import {dialog, openPopUp, closePopUp, checkPinContainer, togglePinActive, closePopUpPressEsc} from './pop_up';
 import {mapTopMinLimit, mapTopMaxLimit, mapLeftMinLimit, mapLeftMaxLimit, checkBorderCoords} from './form';
 import {load as loadAds} from './backend';
 import {renderAds} from './renderAds';
@@ -10,15 +10,12 @@ const mapPins = document.querySelector('.tokyo');
 const adPin = document.querySelector('.pin__main');
 const fieldAdress = document.querySelector('#address');
 const URL = 'https://js.dump.academy/keksobooking/data';
-const tokyoPinMap = document.querySelector('.tokyo__pin-map');
 
 
 loadAds(URL, renderAds, showError);
-// отрисовка первого элемента
-if (adPin.nextElementSibling) {
-  addPopUpInf(adPin.nextElementSibling);
-}
 
+
+document.addEventListener('keydown', closePopUpPressEsc);
 dialogBtn.addEventListener('click', closePopUp);
 dialogBtn.addEventListener('click', (e) => {
   if (e.keyCode === ENTER_KEYCODE) {
@@ -26,22 +23,19 @@ dialogBtn.addEventListener('click', (e) => {
   }
 });
 mapPins.addEventListener('click', (e) => {
-  console.log(e.target);
-  const tempContainer = e.target.parentElement;
-  if (!checkContainsPin(tempContainer)) {
+  if (!checkPinContainer(e.target.parentElement)) {
     return;
   }
-  togglePinActive(tempContainer);
-  openPopUp(tempContainer);
+  togglePinActive(e.target);
+  openPopUp(e.target);
 });
 mapPins.addEventListener('keydown', (e) => {
   if (e.keyCode === ENTER_KEYCODE) {
-    const tempContainer = e.target.parentElement;
-    if (!checkContainsPin(tempContainer)) {
+    if (!checkPinContainer(e.target.parentElement)) {
       return;
     }
-    togglePinActive(tempContainer);
-    openPopUp(tempContainer);
+    togglePinActive(e.target);
+    openPopUp(e.target);
   }
 });
 adPin.addEventListener('mousedown', (downEvt) => {
@@ -77,6 +71,3 @@ adPin.addEventListener('mousedown', (downEvt) => {
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
-
-
-export {tokyoPinMap};

@@ -1,6 +1,8 @@
-import {tokyoPinMap as map} from './index';
-const ads = [];
+import {showPinCard} from './pop_up';
 
+const ads = [];
+const adPin = document.querySelector('.pin__main');
+const tokyoPinMap = document.querySelector('.tokyo__pin-map');
 
 function renderAds(data) {
   const tempFragment = document.createDocumentFragment();
@@ -18,8 +20,11 @@ function renderAds(data) {
     tempContainer.children[0].src = value.author.avatar;
     tempFragment.appendChild(tempContainer);
   }
-  map.appendChild(tempFragment);
+  tokyoPinMap.appendChild(tempFragment);
   ads.push(...data);
+  if (adPin.nextElementSibling) {
+    showPinCard(adPin.nextElementSibling.querySelector('.rounded'));
+  }
 }
 
 

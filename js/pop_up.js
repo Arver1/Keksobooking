@@ -7,10 +7,10 @@ const lodgeTemplate = document.querySelector('#lodge-template').content;
 const tokyoPinMap = document.querySelector('.tokyo__pin-map');
 
 
-const addPopUpInf = (container) => {
+const showPinCard = (container) => {
   let current;
   for (let it of ads) {
-    if (it.author.avatar === container.querySelector('img').getAttribute('src')) {
+    if (it.author.avatar === container.getAttribute('src')) {
       current = it;
       break;
     }
@@ -22,6 +22,12 @@ const addPopUpInf = (container) => {
   tempContainer.querySelector('.lodge__type').textContent = `${lodgeType[current.offer.type]}`;
   tempContainer.querySelector('.lodge__rooms-and-guests').textContent = `Для ${current.offer.guests} гостей в ${current.offer.rooms} комнатах`;
   tempContainer.querySelector('.lodge__checkin-time').textContent = `Заезд после ${current.offer.checkin}, выезд до ${current.offer.checkout}`;
+  {
+    const temp = tempContainer.querySelector('.lodge__photos');
+    for (let src of current.offer.photos) {
+      temp.appendChild(createImg(src, 52, 42));
+    }
+  }
   {
     const fragment = document.createDocumentFragment();
     let temp;
@@ -36,8 +42,15 @@ const addPopUpInf = (container) => {
   dialogPanel.parentElement.replaceChild(tempContainer, dialogPanel);
   document.querySelector('.dialog__title').querySelector('img').src = `${current.author.avatar}`;
 };
+function createImg(path, width, height) {
+  let temp = document.createElement('img');
+  temp.setAttribute('src', path);
+  temp.setAttribute('width', width);
+  temp.setAttribute('width', height);
+  return temp;
+}
 const openPopUp = (container) => {
-  addPopUpInf(container);
+  showPinCard(container);
   dialog.classList.remove('hidden');
   document.addEventListener('keydown', closePopUpPressEsc);
 };
@@ -51,7 +64,7 @@ const closePopUpPressEsc = (e) => {
     closePopUp();
   }
 };
-const checkContainsPin = (container) => {
+const checkPinContainer = (container) => {
   return container.classList.contains('pin');
 };
 const togglePinActive = (container) => {
@@ -59,9 +72,9 @@ const togglePinActive = (container) => {
   if (tempCheck) {
     tempCheck.classList.remove('pin--active');
   }
-  container.classList.toggle('pin--active');
+  container.parentElement.classList.toggle('pin--active');
 };
 
 
-export {dialog, openPopUp, closePopUp, closePopUpPressEsc, checkContainsPin, togglePinActive};
+export {dialog, openPopUp, closePopUp, closePopUpPressEsc, checkPinContainer, togglePinActive, showPinCard};
 
