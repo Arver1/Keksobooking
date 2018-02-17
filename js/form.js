@@ -1,4 +1,5 @@
-import {load} from './backend';
+import {save as saveAd} from './backend';
+import {showError} from './util';
 
 
 const form = document.querySelector('.notice__form');
@@ -16,7 +17,7 @@ const mapTopMinLimit = 100;
 const mapTopMaxLimit = 560;
 const mapLeftMinLimit = 0;
 const mapLeftMaxLimit = mapPins.offsetWidth - adPin.offsetWidth;
-
+const URL = 'https://js.dump.academy/keksobooking';
 
 chAdress.addEventListener('input', () => {
   chAdress.style.boxShadow = '0 0 4px 1px #ff6547';
@@ -95,9 +96,11 @@ roomNumber.addEventListener('input', (e) => {
   }
 });
 form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  load(new FormData(form));
+  saveAd(URL, new FormData(e.target), () => {
+    e.target.reset();
+  }, showError);
 });
+
 function checkBorderCoords(top, min, max) {
   return (top < min) ? min : (top > max) ? max : top;
 }

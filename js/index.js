@@ -11,9 +11,7 @@ const adPin = document.querySelector('.pin__main');
 const fieldAdress = document.querySelector('#address');
 const URL = 'https://js.dump.academy/keksobooking/data';
 
-
 loadAds(URL, renderAds, showError);
-
 
 document.addEventListener('keydown', closePopUpPressEsc);
 dialogBtn.addEventListener('click', closePopUp);

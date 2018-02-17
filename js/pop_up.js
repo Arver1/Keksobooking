@@ -46,7 +46,7 @@ function createImg(path, width, height) {
   let temp = document.createElement('img');
   temp.setAttribute('src', path);
   temp.setAttribute('width', width);
-  temp.setAttribute('width', height);
+  temp.setAttribute('height', height);
   return temp;
 }
 const openPopUp = (container) => {

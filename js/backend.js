@@ -18,8 +18,17 @@ let load = (URL, onLoad, onError) => {
   xhr.open('GET', URL, true);
   xhr.send();
 };
-let save = () => {
-
+let save = (URL, data, onSuccess, onError) => {
+  let xhr = new XMLHttpRequest();
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    onSuccess();
+  });
+  xhr.addEventListener('error', () => {
+    onError('Произошла ошибка соединения');
+  });
+  xhr.open('POST', URL, true);
+  xhr.send(data);
 };
 
 

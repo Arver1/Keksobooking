@@ -1,17 +1,20 @@
 import {showPinCard} from './pop_up';
+import {filterAds} from './filter';
+
 
 const ads = [];
 const adPin = document.querySelector('.pin__main');
 const tokyoPinMap = document.querySelector('.tokyo__pin-map');
 
+
 function renderAds(data) {
   const tempFragment = document.createDocumentFragment();
-  for (let value of data) {
+  for (let value of filterAds(data)) {
     let tempContainer = document.createElement('div');
     let tempImg = document.createElement('img');
     tempImg.setAttribute('tabindex', '0');
     tempContainer.appendChild(tempImg);
-    tempContainer.className = 'pin';
+    tempContainer.className = 'pin ad';
     tempContainer.children[0].className = 'rounded';
     tempContainer.children[0].setAttribute('width', 40);
     tempContainer.children[0].setAttribute('height', 40);
