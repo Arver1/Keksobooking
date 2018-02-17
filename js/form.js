@@ -1,3 +1,6 @@
+import {load} from './backend';
+
+
 const form = document.querySelector('.notice__form');
 const mapPins = document.querySelector('.tokyo');
 const adPin = document.querySelector('.pin__main');
@@ -90,6 +93,10 @@ roomNumber.addEventListener('input', (e) => {
       capacity.querySelector(`[value="0"]`).setAttribute('selected', 'selected');
       break;
   }
+});
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  load(new FormData(form));
 });
 function checkBorderCoords(top, min, max) {
   return (top < min) ? min : (top > max) ? max : top;

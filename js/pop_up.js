@@ -1,5 +1,5 @@
 import {lodgeType, ESC_KEYCODE} from './util';
-import {ads} from './default_ad';
+import {ads} from './renderAds';
 
 
 const dialog = document.querySelector('.dialog');
@@ -25,7 +25,7 @@ const addPopUpInf = (container) => {
   {
     const fragment = document.createDocumentFragment();
     let temp;
-    for (let item of current.offer.feauters) {
+    for (let item of current.offer.features) {
       temp = document.createElement('span');
       temp.className = `feature__image feature__image--${item}`;
       fragment.appendChild(temp);

@@ -1,4 +1,4 @@
-import {getRandomNumber} from './util';
+import {getRandomNumber} from '../js/util';
 import {features} from './default_ad';
 
 

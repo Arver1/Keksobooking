@@ -9,4 +9,20 @@ export const lodgeType = {
 export function getRandomNumber(min, max) {
   return Math.floor(min + Math.random() * (max - min + 1));
 }
-
+export function showError(message) {
+  let node = document.createElement('div');
+  node.classList.add('errorMessage');
+  node.style.zIndex = '200';
+  node.style.margin = '0 auto';
+  node.style.backgroundColor = 'red';
+  node.style.textAlign = 'center';
+  node.style.position = 'absolute';
+  node.style.left = 0;
+  node.style.right = 0;
+  node.style.fontSize = '30px';
+  document.body.insertAdjacentElement('afterBegin', node);
+  node.textContent = message;
+  setTimeout(function () {
+    document.querySelector('.errorMessage').remove();
+  }, 5000);
+}

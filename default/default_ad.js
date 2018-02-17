@@ -1,7 +1,7 @@
 import Ad from './ad';
 import Offer from './offer';
 import Location from './location';
-import {getRandomNumber} from './util';
+import {getRandomNumber} from '../js/util';
 
 
 const title = `
