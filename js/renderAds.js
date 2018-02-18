@@ -23,6 +23,7 @@ function renderAds(data) {
     tempContainer.children[0].className = 'rounded';
     tempContainer.children[0].setAttribute('width', 40);
     tempContainer.children[0].setAttribute('height', 40);
+    tempContainer.children[0].setAttribute('title', value.offer.title);
     tempContainer.style.left = value.location.x - tempContainer.children[0].getAttribute('width') / 2 + 'px';
     tempContainer.style.top = value.location.y - tempContainer.children[0].getAttribute('height') / 2 + 'px';
     tempContainer.children[0].src = value.author.avatar;

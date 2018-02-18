@@ -10,7 +10,7 @@ const tokyoPinMap = document.querySelector('.tokyo__pin-map');
 const showPinCard = (container) => {
   let current;
   for (let it of ads) {
-    if (it.author.avatar === container.getAttribute('src')) {
+    if (it.offer.title === container.getAttribute('title')) {
       current = it;
       break;
     }

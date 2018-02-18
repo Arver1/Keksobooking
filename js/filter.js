@@ -49,15 +49,6 @@ const checkPriceType = item => {
       break;
   }
   return flag;
-  /*
-  const temp = priceType[priceType.selectedIndex].value;
-  if (temp === 'any') {
-    return true;
-  }
-  const range = priceType[priceType.selectedIndex].value.match(/\d+/g);
-  if (range === 1) {
-    return item.offer.price
-  }*/
 };
 filters.addEventListener('change', () => {
   for (let it of document.querySelectorAll('.ad')) {
