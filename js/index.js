@@ -2,7 +2,7 @@ import {ENTER_KEYCODE, showError} from './util';
 import {dialog, openPopUp, closePopUp, checkPinContainer, togglePinActive, closePopUpPressEsc} from './pop_up';
 import {mapTopMinLimit, mapTopMaxLimit, mapLeftMinLimit, mapLeftMaxLimit, checkBorderCoords} from './form';
 import {load as loadAds} from './backend';
-import {renderAds} from './renderAds';
+import {saveAds} from './renderAds';
 
 
 const dialogBtn = dialog.querySelector('.dialog__close');
@@ -11,7 +11,7 @@ const adPin = document.querySelector('.pin__main');
 const fieldAdress = document.querySelector('#address');
 const URL = 'https://js.dump.academy/keksobooking/data';
 
-loadAds(URL, renderAds, showError);
+loadAds(URL, saveAds, showError);
 
 document.addEventListener('keydown', closePopUpPressEsc);
 dialogBtn.addEventListener('click', closePopUp);

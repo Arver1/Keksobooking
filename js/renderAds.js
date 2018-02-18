@@ -7,9 +7,14 @@ const adPin = document.querySelector('.pin__main');
 const tokyoPinMap = document.querySelector('.tokyo__pin-map');
 
 
+function saveAds(data) {
+  ads.push(...data);
+  renderAds(ads);
+}
 function renderAds(data) {
   const tempFragment = document.createDocumentFragment();
-  for (let value of filterAds(data)) {
+  const tempData = filterAds(data);
+  for (let value of tempData) {
     let tempContainer = document.createElement('div');
     let tempImg = document.createElement('img');
     tempImg.setAttribute('tabindex', '0');
@@ -24,11 +29,10 @@ function renderAds(data) {
     tempFragment.appendChild(tempContainer);
   }
   tokyoPinMap.appendChild(tempFragment);
-  ads.push(...data);
   if (adPin.nextElementSibling) {
     showPinCard(adPin.nextElementSibling.querySelector('.rounded'));
   }
 }
 
 
-export {renderAds, ads};
+export {saveAds, renderAds, ads};
