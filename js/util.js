@@ -1,5 +1,6 @@
 export const ENTER_KEYCODE = 13;
 export const ESC_KEYCODE = 27;
+export const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 export const lodgeType = {
   bungalo: 'Бунгало',
   flat: 'Квартира',

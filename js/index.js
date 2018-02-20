@@ -3,7 +3,7 @@ import {dialog, openPopUp, closePopUp, checkPinContainer, togglePinActive, close
 import {mapTopMinLimit, mapTopMaxLimit, mapLeftMinLimit, mapLeftMaxLimit, checkBorderCoords} from './form';
 import {load as loadAds} from './backend';
 import {saveAds} from './renderAds';
-
+import './preview';
 
 const dialogBtn = dialog.querySelector('.dialog__close');
 const mapPins = document.querySelector('.tokyo');
