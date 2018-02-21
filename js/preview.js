@@ -21,14 +21,18 @@ fileChooserUserAva.addEventListener('change', () => {
 });
 fileChooserAdImgs.addEventListener('change', () => {
   let files = [...fileChooserAdImgs.files];
-  files = files.filter(() => FILE_TYPES.some((it) => files.type.match(it)));
+  files = files.filter((file) => FILE_TYPES.some((it) => file.type.match(it)));
   files = files.length > 16 ? files.slice(-16) : files;
   if (!files) {
     return;
   }
-  const reader = new FileReader();
-  reader.addEventListener('load', () => {
-
+  files.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      AdImgs[i].style.backgroundImage = 'url(' + reader.result + ')';
+      AdImgs[i].style.backgroundRepeat = 'no-repeat';
+      AdImgs[i].style.backgroundPosition = 'center';
+    });
+    reader.readAsDataURL(file);
   });
-  reader.readAsDataURL(files);
 });
