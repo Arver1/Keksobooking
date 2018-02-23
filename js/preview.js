@@ -26,13 +26,22 @@ fileChooserAdImgs.addEventListener('change', () => {
   if (!files) {
     return;
   }
+  let current = 0;
+  for (let div of AdImgs) {
+    if (div.style.backgroundColor = '') {
+      
+    }
+  }
   files.forEach((file, i) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      AdImgs[i].style.backgroundImage = 'url(' + reader.result + ')';
-      AdImgs[i].style.backgroundRepeat = 'no-repeat';
-      AdImgs[i].style.backgroundPosition = 'center';
-    });
-    reader.readAsDataURL(file);
+    setTimeout(function () {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        AdImgs[i].style.backgroundImage = `url(${reader.result})`;
+        AdImgs[i].style.backgroundRepeat = 'no-repeat';
+        AdImgs[i].style.backgroundPosition = 'center';
+        AdImgs[i].style.backgroundSize = 'cover';
+      });
+      reader.readAsDataURL(file);
+    }, 1500 * i);
   });
 });
